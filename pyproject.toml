@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "bl"
+version = "0.1.0"
+description = "bl related code"
+authors = ["Aleksandre Kandelaki"]
+readme = "README.md"
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+
+
+[tool.poetry.group.dev.dependencies]
+setuptools = "^68.2.2"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
