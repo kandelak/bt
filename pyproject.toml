@@ -8,6 +8,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
+opencv-python = "^4.8.1.78"
+jupyter = "^1.0.0"
+matplotlib = "^3.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
