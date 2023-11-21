@@ -1,2 +1,6 @@
 matplotlib
 opencv-python
+numpy
+tqdm
+rasterio
+geojson
