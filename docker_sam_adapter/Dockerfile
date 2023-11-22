@@ -22,12 +22,12 @@ RUN curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | gpg --dearm
     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
     tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 
-RUN apt-get update && apt-get install -y nvidia-container-runtime
+RUN apt-get update && apt-get install -y nvidia-container-toolkit
 
 # Add environment variables for GPU execution
 
 RUN echo "NVIDIA_DRIVER_CAPABILITIES=compute,utility,video" >> /etc/environment
-RUN echo "NVIDIA_REQUIRE_CUDA=cuda>=9.0" >> /etc/environment
+RUN echo "NVIDIA_REQUIRE_CUDA=cuda=11.6" >> /etc/environment
 RUN echo "NVIDIA_VISIBLE_DEVICES=all" >> /etc/environment
 
 # Set Python 3.8 as the default python version
