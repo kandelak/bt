@@ -41,6 +41,7 @@ class CustomDataset(Dataset):
         # Convert the mask to a binary mask where 1 indicates the presence of solar panels
         mask = torch.tensor(np.array(mask) == 255, dtype=torch.float32)
 
+
         return image, mask
 
 # Define image transformations
@@ -86,7 +87,7 @@ for epoch in range(num_epochs):
 
         optimizer.zero_grad()
         outputs = model(images)
-        loss = criterion(outputs['out'][:, 0, :, :], masks)
+        loss = criterion(outputs['out'], masks)
         loss.backward()
         optimizer.step()
 
@@ -97,7 +98,7 @@ with torch.no_grad():
     for images, masks in tqdm(val_loader, desc='Validation'):
         images, masks = images.to(device), masks.to(device)
         outputs = model(images)
-        loss = criterion(outputs['out'][:, 0, :, :], masks)
+        loss = criterion(outputs['out'], masks)
         total_val_loss += loss.item()
 
 average_val_loss = total_val_loss / len(val_loader)
