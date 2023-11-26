@@ -20,3 +20,4 @@ easydict
 attr
 thop
 torchsummary
+openmim

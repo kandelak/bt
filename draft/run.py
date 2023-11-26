@@ -7,6 +7,8 @@ from PIL import Image
 import numpy as np
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
+import matplotlib.pyplot as plt
+from torchvision.utils import make_grid
 
 # Define custom dataset class
 class CustomDataset(Dataset):
@@ -79,7 +81,7 @@ criterion = torch.nn.BCEWithLogitsLoss()  # Binary Cross Entropy Loss for binary
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # Training loop
-num_epochs = 10
+num_epochs = 5
 for epoch in range(num_epochs):
     model.train()
     for images, masks in tqdm(train_loader, desc=f'Epoch {epoch + 1}/{num_epochs}'):
@@ -91,15 +93,39 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
+#Visualization 
+def visualize_batch(images, masks, outputs, output_folder, batch_idx):
+    # Convert tensors to numpy arrays
+    images_np = images.cpu().numpy()
+    masks_np = masks.cpu().numpy()
+    preds_np = torch.sigmoid(outputs['out']).cpu().numpy()
+
+    # Create a grid of images for visualization
+    grid_images = make_grid(torch.cat([images_np, masks_np, preds_np], dim=1), nrow=4, normalize=True)
+
+    # Save the visualization to the output folder
+    output_path = os.path.join(output_folder, f'visualization_{batch_idx}.png')
+    plt.imsave(output_path, grid_images.permute(1, 2, 0).cpu().numpy())
+
+
+
 # Validation loop
 model.eval()
 total_val_loss = 0.0
+output_folder = 'validation_visualizations'
+os.makedirs(output_folder, exist_ok=True)
+
 with torch.no_grad():
-    for images, masks in tqdm(val_loader, desc='Validation'):
+    for batch_idx, (images, masks) in enumerate(tqdm(val_loader, desc='Validation')):
         images, masks = images.to(device), masks.to(device)
         outputs = model(images)
         loss = criterion(outputs['out'], masks)
         total_val_loss += loss.item()
+
+        # Visualize and save a few examples
+        if batch_idx % 10 == 0:
+            visualize_batch(images, masks, outputs, output_folder, batch_idx)
+
 
 average_val_loss = total_val_loss / len(val_loader)
 print(f'Average Validation Loss: {average_val_loss}')

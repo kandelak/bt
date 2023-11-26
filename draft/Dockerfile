@@ -7,8 +7,10 @@ WORKDIR /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --upgrade pip
 
-# Copy files into container
-COPY . .
+# Copy requirements into container
+COPY ./requirements.txt .
+# Copy training data into container
+COPY ./data .
 
 # Install requirements
 RUN pip install -r requirements.txt
