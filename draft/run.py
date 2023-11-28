@@ -39,7 +39,7 @@ class CustomDataset(Dataset):
             mask = self.transform(mask)
 
         # Convert the mask to a binary mask where 1 indicates the presence of solar panels
-        mask = torch.tensor(np.array(mask) == 255, dtype=torch.float32)
+        mask = torch.tensor(np.array(mask) == True, dtype=torch.float32)
 
 
         return image, mask
